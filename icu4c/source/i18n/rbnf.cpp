@@ -28,6 +28,7 @@
 #include "unicode/udisplaycontext.h"
 #include "unicode/brkiter.h"
 #include "unicode/ucasemap.h"
+#include "unicode/decimfmt.h"
 
 #include "cmemory.h"
 #include "cstring.h"

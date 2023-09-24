@@ -8,6 +8,7 @@
 #define __NUMPARSE_SYMBOLS_H__
 
 #include "numparse_types.h"
+#include "unicode/dcfmtsym.h"
 #include "unicode/uniset.h"
 #include "static_unicode_sets.h"
 

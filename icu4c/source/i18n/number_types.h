@@ -8,10 +8,8 @@
 #define __NUMBER_TYPES_H__
 
 #include <cstdint>
-#include "unicode/decimfmt.h"
 #include "unicode/unum.h"
 #include "unicode/numsys.h"
-#include "unicode/numberformatter.h"
 #include "unicode/utf16.h"
 #include "uassert.h"
 #include "unicode/platform.h"
@@ -22,6 +20,14 @@
 U_NAMESPACE_BEGIN
 namespace number {
 namespace impl {
+
+// can't be #ifndef U_HIDE_INTERNAL_API; referenced throughout this file in public classes
+/**
+ * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
+ *
+ * @internal
+ */
+typedef int16_t digits_t;
 
 // For convenience and historical reasons, import the Field typedef to the namespace.
 typedef FormattedStringBuilder::Field Field;

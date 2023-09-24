@@ -8,6 +8,7 @@
 #define __NUMPARSE_DECIMAL_H__
 
 #include "unicode/uniset.h"
+#include "unicode/numberformatter.h"
 #include "numparse_types.h"
 
 U_NAMESPACE_BEGIN namespace numparse {

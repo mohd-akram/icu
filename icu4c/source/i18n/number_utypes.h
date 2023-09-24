@@ -7,8 +7,8 @@
 #ifndef __SOURCE_NUMBER_UTYPES_H__
 #define __SOURCE_NUMBER_UTYPES_H__
 
-#include "unicode/numberformatter.h"
-#include "number_types.h"
+#include "unicode/measunit.h"
+#include "unicode/uformattednumber.h"
 #include "number_decimalquantity.h"
 #include "formatted_string_builder.h"
 #include "formattedval_impl.h"

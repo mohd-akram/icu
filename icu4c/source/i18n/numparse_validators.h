@@ -7,6 +7,7 @@
 #ifndef __SOURCE_NUMPARSE_VALIDATORS_H__
 #define __SOURCE_NUMPARSE_VALIDATORS_H__
 
+#include "unicode/numberformatter.h"
 #include "numparse_types.h"
 #include "static_unicode_sets.h"
 

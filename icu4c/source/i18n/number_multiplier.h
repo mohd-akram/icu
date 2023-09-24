@@ -7,6 +7,7 @@
 #ifndef __SOURCE_NUMBER_MULTIPLIER_H__
 #define __SOURCE_NUMBER_MULTIPLIER_H__
 
+#include "unicode/numberformatter.h"
 #include "numparse_types.h"
 #include "number_decimfmtprops.h"
 

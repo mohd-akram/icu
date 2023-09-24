@@ -7,6 +7,7 @@
 #ifndef __NUMBER_ROUNDINGUTILS_H__
 #define __NUMBER_ROUNDINGUTILS_H__
 
+#include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "string_segment.h"
 

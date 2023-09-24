@@ -7,6 +7,7 @@
 #ifndef __NUMBER_SCIENTIFIC_H__
 #define __NUMBER_SCIENTIFIC_H__
 
+#include "unicode/numberformatter.h"
 #include "number_types.h"
 
 U_NAMESPACE_BEGIN namespace number {

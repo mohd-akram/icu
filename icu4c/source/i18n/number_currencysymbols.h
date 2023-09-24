@@ -7,6 +7,7 @@
 #ifndef __SOURCE_NUMBER_CURRENCYSYMBOLS_H__
 #define __SOURCE_NUMBER_CURRENCYSYMBOLS_H__
 
+#include "unicode/dcfmtsym.h"
 #include "numparse_types.h"
 #include "charstr.h"
 #include "number_decimfmtprops.h"

@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include "unicode/dcfmtsym.h"
 #include "unicode/uniset.h"
 #include "unicode/simpleformatter.h"
 #include "standardplural.h"

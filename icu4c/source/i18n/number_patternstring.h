@@ -9,8 +9,10 @@
 
 
 #include <cstdint>
+#include "unicode/dcfmtsym.h"
 #include "unicode/unum.h"
 #include "unicode/unistr.h"
+#include "unicode/unumberformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
 #include "number_decimfmtprops.h"

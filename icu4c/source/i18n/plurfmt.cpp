@@ -12,6 +12,7 @@
 
 #include "unicode/decimfmt.h"
 #include "unicode/messagepattern.h"
+#include "unicode/numberformatter.h"
 #include "unicode/plurfmt.h"
 #include "unicode/plurrule.h"
 #include "unicode/utypes.h"

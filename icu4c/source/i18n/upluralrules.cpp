@@ -18,6 +18,7 @@
 #include "unicode/unum.h"
 #include "unicode/numfmt.h"
 #include "unicode/unumberformatter.h"
+#include "unicode/decimfmt.h"
 #include "number_decimalquantity.h"
 #include "number_utypes.h"
 #include "numrange_impl.h"

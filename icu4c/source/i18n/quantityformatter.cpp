@@ -12,6 +12,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/numberformatter.h"
 #include "unicode/simpleformatter.h"
 #include "quantityformatter.h"
 #include "uassert.h"

@@ -127,14 +127,6 @@ class IntegerWidth;
 
 namespace impl {
 
-// can't be #ifndef U_HIDE_INTERNAL_API; referenced throughout this file in public classes
-/**
- * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
- *
- * @internal
- */
-typedef int16_t digits_t;
-
 // can't be #ifndef U_HIDE_INTERNAL_API; needed for struct initialization
 /**
  * Use a default threshold of 3. This means that the third time .format() is called, the data structures get built
