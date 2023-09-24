@@ -22,24 +22,16 @@ SimpleNumber::forInt64(int64_t value, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return SimpleNumber();
     }
-    auto results = new UFormattedNumberData();
-    if (results == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return SimpleNumber();
-    }
-    results->quantity.setToLong(value);
-    return SimpleNumber(results, status);
+    auto results = UFormattedNumberData();
+    results.quantity.setToLong(value);
+    return SimpleNumber(std::move(results), status);
 }
 
-SimpleNumber::SimpleNumber(UFormattedNumberData* data, UErrorCode& status) : fData(data) {
+SimpleNumber::SimpleNumber(UFormattedNumberData&& data, UErrorCode& status) : fData(std::move(data)) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fData == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    if (fData->quantity.isNegative()) {
+    if (fData.quantity.isNegative()) {
         fSign = UNUM_SIMPLE_NUMBER_MINUS_SIGN;
     } else {
         fSign = UNUM_SIMPLE_NUMBER_NO_SIGN;
@@ -47,71 +39,45 @@ SimpleNumber::SimpleNumber(UFormattedNumberData* data, UErrorCode& status) : fDa
 }
 
 void SimpleNumber::cleanup() {
-    delete fData;
-    fData = nullptr;
 }
 
 void SimpleNumber::multiplyByPowerOfTen(int32_t power, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fData == nullptr) {
-        status = U_INVALID_STATE_ERROR;
-        return;
-    }
-    fData->quantity.adjustMagnitude(power);
+    fData.quantity.adjustMagnitude(power);
 }
 
 void SimpleNumber::roundTo(int32_t position, UNumberFormatRoundingMode roundingMode, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fData == nullptr) {
-        status = U_INVALID_STATE_ERROR;
-        return;
-    }
-    fData->quantity.roundToMagnitude(position, roundingMode, status);
+    fData.quantity.roundToMagnitude(position, roundingMode, status);
 }
 
 void SimpleNumber::setMinimumIntegerDigits(uint32_t position, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fData == nullptr) {
-        status = U_INVALID_STATE_ERROR;
-        return;
-    }
-    fData->quantity.setMinInteger(position);
+    fData.quantity.setMinInteger(position);
 }
 
 void SimpleNumber::setMinimumFractionDigits(uint32_t position, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fData == nullptr) {
-        status = U_INVALID_STATE_ERROR;
-        return;
-    }
-    fData->quantity.setMinFraction(position);
+    fData.quantity.setMinFraction(position);
 }
 
 void SimpleNumber::truncateStart(uint32_t position, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fData == nullptr) {
-        status = U_INVALID_STATE_ERROR;
-        return;
-    }
-    fData->quantity.applyMaxInteger(position);
+    fData.quantity.applyMaxInteger(position);
 }
 
 void SimpleNumber::setSign(USimpleNumberSign sign, UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return;
-    }
-    if (fData == nullptr) {
-        status = U_INVALID_STATE_ERROR;
         return;
     }
     fSign = sign;
@@ -211,20 +177,14 @@ FormattedNumber SimpleNumberFormatter::format(SimpleNumber value, UErrorCode &st
 
     // Do not save the results object if we encountered a failure.
     if (U_SUCCESS(status)) {
-        auto temp = value.fData;
-        value.fData = nullptr;
-        return FormattedNumber(temp);
+        return FormattedNumber(std::move(value.fData));
     } else {
         return FormattedNumber(status);
     }
 }
 
-void SimpleNumberFormatter::formatImpl(UFormattedNumberData* data, USimpleNumberSign sign, UErrorCode &status) const {
+void SimpleNumberFormatter::formatImpl(UFormattedNumberData& data, USimpleNumberSign sign, UErrorCode &status) const {
     if (U_FAILURE(status)) {
-        return;
-    }
-    if (data == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     if (fPatternModifier == nullptr || fMicros == nullptr) {
@@ -244,12 +204,12 @@ void SimpleNumberFormatter::formatImpl(UFormattedNumberData* data, USimpleNumber
     const Modifier* modifier = (*fPatternModifier)[signum];
     auto length = NumberFormatterImpl::writeNumber(
         *fMicros,
-        data->quantity,
-        data->getStringRef(),
+        data.quantity,
+        data.getStringRef(),
         0,
         status);
-    length += modifier->apply(data->getStringRef(), 0, length, status);
-    data->getStringRef().writeTerminator(status);
+    length += modifier->apply(data.getStringRef(), 0, length, status);
+    data.getStringRef().writeTerminator(status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

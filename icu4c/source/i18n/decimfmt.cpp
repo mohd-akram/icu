@@ -521,7 +521,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
     UErrorCode localStatus = U_ZERO_ERROR;
     UFormattedNumberData output;
     output.quantity.setToDouble(number);
-    fields->formatter.formatImpl(&output, localStatus);
+    fields->formatter.formatImpl(output, localStatus);
     fieldPositionHelper(output, pos, appendTo.length(), localStatus);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, localStatus);
@@ -544,7 +544,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
     }
     UFormattedNumberData output;
     output.quantity.setToDouble(number);
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -568,7 +568,7 @@ DecimalFormat::format(double number, UnicodeString& appendTo, FieldPositionItera
     }
     UFormattedNumberData output;
     output.quantity.setToDouble(number);
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -601,7 +601,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
     UErrorCode localStatus = U_ZERO_ERROR;
     UFormattedNumberData output;
     output.quantity.setToLong(number);
-    fields->formatter.formatImpl(&output, localStatus);
+    fields->formatter.formatImpl(output, localStatus);
     fieldPositionHelper(output, pos, appendTo.length(), localStatus);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, localStatus);
@@ -624,7 +624,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
     }
     UFormattedNumberData output;
     output.quantity.setToLong(number);
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -648,7 +648,7 @@ DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIter
     }
     UFormattedNumberData output;
     output.quantity.setToLong(number);
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -669,7 +669,7 @@ DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPosition
     }
     UFormattedNumberData output;
     output.quantity.setToDecNumber(number, status);
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -689,7 +689,7 @@ UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeStrin
     }
     UFormattedNumberData output;
     output.quantity = number;
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -710,7 +710,7 @@ DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, Fi
     }
     UFormattedNumberData output;
     output.quantity = number;
-    fields->formatter.formatImpl(&output, status);
+    fields->formatter.formatImpl(output, status);
     fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable, status);
@@ -1584,7 +1584,7 @@ void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQu
     }
     UFormattedNumberData obj;
     number.populateDecimalQuantity(obj.quantity, status);
-    fields->formatter.formatImpl(&obj, status);
+    fields->formatter.formatImpl(obj, status);
     output = std::move(obj.quantity);
 }
 

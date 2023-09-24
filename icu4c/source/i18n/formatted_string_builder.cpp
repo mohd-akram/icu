@@ -51,9 +51,25 @@ FormattedStringBuilder::~FormattedStringBuilder() {
     }
 }
 
+FormattedStringBuilder::FormattedStringBuilder(FormattedStringBuilder &&other) {
+    *this = std::move(other);
+}
+
 FormattedStringBuilder::FormattedStringBuilder(const FormattedStringBuilder &other) {
     *this = other;
 }
+
+FormattedStringBuilder &FormattedStringBuilder::operator=(FormattedStringBuilder &&other) {
+    fUsingHeap = other.fUsingHeap;
+    fZero = other.fZero;
+    fLength = other.fLength;
+
+    fChars = std::move(other.fChars);
+    fFields = std::move(other.fFields);
+    other.fUsingHeap = false;
+
+    return *this;
+};
 
 FormattedStringBuilder &FormattedStringBuilder::operator=(const FormattedStringBuilder &other) {
     // Check for self-assignment

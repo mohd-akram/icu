@@ -513,7 +513,7 @@ UnicodeString &MeasureFormat::formatMeasurePerUnit(
         lnf->unit(measure.getUnit())
             .perUnit(perUnit)
             .unitWidth(getUnitWidth(fWidth))
-            .formatImpl(&result, status);
+            .formatImpl(result, status);
     }
     DecimalFormat::fieldPositionHelper(result, pos, appendTo.length(), status);
     appendTo.append(result.toTempString(status));
@@ -712,7 +712,7 @@ UnicodeString &MeasureFormat::formatMeasure(
         result.quantity.setToDouble(amtNumber.getDouble(status));
         lnf->unit(amtUnit)
             .unitWidth(getUnitWidth(fWidth))
-            .formatImpl(&result, status);
+            .formatImpl(result, status);
     }
     DecimalFormat::fieldPositionHelper(result, pos, appendTo.length(), status);
     appendTo.append(result.toTempString(status));

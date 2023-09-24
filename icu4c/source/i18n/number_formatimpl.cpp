@@ -29,17 +29,17 @@ NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& s
     : NumberFormatterImpl(macros, true, status) {
 }
 
-int32_t NumberFormatterImpl::formatStatic(const MacroProps &macros, UFormattedNumberData *results,
+int32_t NumberFormatterImpl::formatStatic(const MacroProps &macros, UFormattedNumberData &results,
                                           UErrorCode &status) {
-    DecimalQuantity &inValue = results->quantity;
-    FormattedStringBuilder &outString = results->getStringRef();
+    DecimalQuantity &inValue = results.quantity;
+    FormattedStringBuilder &outString = results.getStringRef();
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
     if (U_FAILURE(status)) { return 0; }
     int32_t length = writeNumber(micros.simple, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
-    results->outputUnit = std::move(micros.outputUnit);
-    results->gender = micros.gender;
+    results.outputUnit = std::move(micros.outputUnit);
+    results.gender = micros.gender;
     return length;
 }
 
@@ -55,16 +55,16 @@ int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, Sig
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
 // See MicroProps::processQuantity() for details.
 
-int32_t NumberFormatterImpl::format(UFormattedNumberData *results, UErrorCode &status) const {
-    DecimalQuantity &inValue = results->quantity;
-    FormattedStringBuilder &outString = results->getStringRef();
+int32_t NumberFormatterImpl::format(UFormattedNumberData &results, UErrorCode &status) const {
+    DecimalQuantity &inValue = results.quantity;
+    FormattedStringBuilder &outString = results.getStringRef();
     MicroProps micros;
     preProcess(inValue, micros, status);
     if (U_FAILURE(status)) { return 0; }
     int32_t length = writeNumber(micros.simple, inValue, outString, 0, status);
     length += writeAffixes(micros, outString, 0, length, status);
-    results->outputUnit = std::move(micros.outputUnit);
-    results->gender = micros.gender;
+    results.outputUnit = std::move(micros.outputUnit);
+    results.gender = micros.gender;
     return length;
 }
 

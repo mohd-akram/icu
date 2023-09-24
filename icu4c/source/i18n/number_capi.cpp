@@ -71,17 +71,15 @@ struct UFormattedNumberImpl : public UFormattedValueImpl, public UFormattedNumbe
 };
 
 UFormattedNumberImpl::UFormattedNumberImpl()
-        : fImpl(&fData) {
+        : fImpl(std::move(fData)) {
     fFormattedValue = &fImpl;
 }
 
 UFormattedNumberImpl::~UFormattedNumberImpl() {
-    // Disown the data from fImpl so it doesn't get deleted twice
-    fImpl.fData = nullptr;
 }
 
 void UFormattedNumberImpl::setTo(FormattedNumber value) {
-    fData = std::move(*value.fData);
+    fData = std::move(value.fData);
 }
 
 }
@@ -146,7 +144,7 @@ unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNum
     result->fData.resetString();
     result->fData.quantity.clear();
     result->fData.quantity.setToLong(value);
-    formatter->fFormatter.formatImpl(&result->fData, *ec);
+    formatter->fFormatter.formatImpl(result->fData, *ec);
 }
 
 U_CAPI void U_EXPORT2
@@ -159,7 +157,7 @@ unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedN
     result->fData.resetString();
     result->fData.quantity.clear();
     result->fData.quantity.setToDouble(value);
-    formatter->fFormatter.formatImpl(&result->fData, *ec);
+    formatter->fFormatter.formatImpl(result->fData, *ec);
 }
 
 U_CAPI void U_EXPORT2
@@ -173,7 +171,7 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
     result->fData.quantity.clear();
     result->fData.quantity.setToDecNumber({value, valueLen}, *ec);
     if (U_FAILURE(*ec)) { return; }
-    formatter->fFormatter.formatImpl(&result->fData, *ec);
+    formatter->fFormatter.formatImpl(result->fData, *ec);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -382,7 +380,7 @@ usnumf_formatInt64(
         return;
     }
     auto localResult = formatter->fFormatter.formatInt64(value, *ec);
-    result->setTo(std::move(localResult)); 
+    result->setTo(std::move(localResult));
 }
 
 U_CAPI void U_EXPORT2

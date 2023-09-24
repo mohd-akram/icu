@@ -282,7 +282,7 @@ PluralFormat::format(const Formattable& numberObject, double number,
         if (U_FAILURE(status)) {
             return appendTo;
         }
-        lnf->formatImpl(&data, status); // mutates &data
+        lnf->formatImpl(data, status);
         if (U_FAILURE(status)) {
             return appendTo;
         }

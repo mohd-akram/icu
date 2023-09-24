@@ -15,6 +15,8 @@
 #include "unicode/measunit.h"
 #include "unicode/udisplayoptions.h"
 
+#include "number_utypes.h"
+
 /**
  * \file
  * \brief C API: Formatted number result from various number formatting functions.
@@ -53,7 +55,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @stable ICU 64
      */
     FormattedNumber()
-        : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
+        : fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedNumber in an undefined state.
@@ -167,21 +169,20 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 #endif  /* U_HIDE_INTERNAL_API */
 
   private:
-    // Can't use LocalPointer because UFormattedNumberData is forward-declared
-    impl::UFormattedNumberData *fData;
+    impl::UFormattedNumberData fData;
 
     // Error code for the terminal methods
     UErrorCode fErrorCode;
 
     /**
-     * Internal constructor from data type. Adopts the data pointer.
+     * Internal constructor from data type.
      * @internal (private)
      */
-    explicit FormattedNumber(impl::UFormattedNumberData *results)
-        : fData(results), fErrorCode(U_ZERO_ERROR) {}
+    explicit FormattedNumber(impl::UFormattedNumberData &&results)
+        : fData(std::move(results)), fErrorCode(U_ZERO_ERROR) {}
 
     explicit FormattedNumber(UErrorCode errorCode)
-        : fData(nullptr), fErrorCode(errorCode) {}
+        : fErrorCode(errorCode) {}
 
     void toDecimalNumber(ByteSink& sink, UErrorCode& status) const;
 

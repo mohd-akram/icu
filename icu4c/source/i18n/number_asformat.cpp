@@ -55,7 +55,7 @@ UnicodeString& LocalizedNumberFormatterAsFormat::format(const Formattable& obj, 
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    fFormatter.formatImpl(&data, status);
+    fFormatter.formatImpl(data, status);
     if (U_FAILURE(status)) {
         return appendTo;
     }
@@ -80,7 +80,7 @@ UnicodeString& LocalizedNumberFormatterAsFormat::format(const Formattable& obj, 
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    fFormatter.formatImpl(&data, status);
+    fFormatter.formatImpl(data, status);
     if (U_FAILURE(status)) {
         return appendTo;
     }

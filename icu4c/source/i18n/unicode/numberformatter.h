@@ -2643,7 +2643,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @param status
      * @internal
      */
-    void formatImpl(impl::UFormattedNumberData *results, UErrorCode &status) const;
+    void formatImpl(impl::UFormattedNumberData &results, UErrorCode &status) const;
 
 #endif  /* U_HIDE_INTERNAL_API */
 

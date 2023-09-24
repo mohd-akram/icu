@@ -193,7 +193,7 @@ void QuantityFormatter::formatAndSelect(
         if (U_FAILURE(status)) {
             return;
         }
-        lnf->formatImpl(&fn, status);
+        lnf->formatImpl(fn, status);
         if (U_FAILURE(status)) {
             return;
         }

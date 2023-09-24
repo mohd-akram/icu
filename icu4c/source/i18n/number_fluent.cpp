@@ -565,57 +565,42 @@ LocalizedNumberFormatter UnlocalizedNumberFormatter::locale(const Locale& locale
 
 FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
-    if (results == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber(status);
-    }
-    results->quantity.setToLong(value);
+    auto results = UFormattedNumberData();
+    results.quantity.setToLong(value);
     formatImpl(results, status);
 
     // Do not save the results object if we encountered a failure.
     if (U_SUCCESS(status)) {
-        return FormattedNumber(results);
+        return FormattedNumber(std::move(results));
     } else {
-        delete results;
         return FormattedNumber(status);
     }
 }
 
 FormattedNumber LocalizedNumberFormatter::formatDouble(double value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
-    if (results == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber(status);
-    }
-    results->quantity.setToDouble(value);
+    auto results = UFormattedNumberData();
+    results.quantity.setToDouble(value);
     formatImpl(results, status);
 
     // Do not save the results object if we encountered a failure.
     if (U_SUCCESS(status)) {
-        return FormattedNumber(results);
+        return FormattedNumber(std::move(results));
     } else {
-        delete results;
         return FormattedNumber(status);
     }
 }
 
 FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
-    if (results == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber(status);
-    }
-    results->quantity.setToDecNumber(value, status);
+    auto results = UFormattedNumberData();
+    results.quantity.setToDecNumber(value, status);
     formatImpl(results, status);
 
     // Do not save the results object if we encountered a failure.
     if (U_SUCCESS(status)) {
-        return FormattedNumber(results);
+        return FormattedNumber(std::move(results));
     } else {
-        delete results;
         return FormattedNumber(status);
     }
 }
@@ -623,24 +608,19 @@ FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErro
 FormattedNumber
 LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
-    auto results = new UFormattedNumberData();
-    if (results == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return FormattedNumber(status);
-    }
-    results->quantity = dq;
+    auto results = UFormattedNumberData();
+    results.quantity = dq;
     formatImpl(results, status);
 
     // Do not save the results object if we encountered a failure.
     if (U_SUCCESS(status)) {
-        return FormattedNumber(results);
+        return FormattedNumber(std::move(results));
     } else {
-        delete results;
         return FormattedNumber(status);
     }
 }
 
-void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
+void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData& results, UErrorCode& status) const {
     if (computeCompiled(status)) {
         fCompiled->format(results, status);
     } else {
@@ -649,7 +629,7 @@ void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, U
     if (U_FAILURE(status)) {
         return;
     }
-    results->getStringRef().writeTerminator(status);
+    results.getStringRef().writeTerminator(status);
 }
 
 void LocalizedNumberFormatter::getAffixImpl(bool isPrefix, bool isNegative, UnicodeString& result,

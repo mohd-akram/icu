@@ -13,6 +13,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/usimplenumberformatter.h"
 #include "unicode/formattednumber.h"
+#include "number_utypes.h"
 
 /**
  * \file
@@ -142,9 +143,8 @@ class U_I18N_API SimpleNumber : public UMemory {
      * @draft ICU 73
      */
     SimpleNumber(SimpleNumber&& other) noexcept {
-        fData = other.fData;
+        fData = std::move(other.fData);
         fSign = other.fSign;
-        other.fData = nullptr;
     }
 
     /**
@@ -154,20 +154,19 @@ class U_I18N_API SimpleNumber : public UMemory {
      */
     SimpleNumber& operator=(SimpleNumber&& other) noexcept {
         cleanup();
-        fData = other.fData;
+        fData = std::move(other.fData);
         fSign = other.fSign;
-        other.fData = nullptr;
         return *this;
     }
 
   private:
-    SimpleNumber(impl::UFormattedNumberData* data, UErrorCode& status);
+    SimpleNumber(impl::UFormattedNumberData&& data, UErrorCode& status);
     SimpleNumber(const SimpleNumber&) = delete;
     SimpleNumber& operator=(const SimpleNumber&) = delete;
 
     void cleanup();
 
-    impl::UFormattedNumberData* fData = nullptr;
+    impl::UFormattedNumberData fData;
     USimpleNumberSign fSign = UNUM_SIMPLE_NUMBER_NO_SIGN;
 
     friend class SimpleNumberFormatter;
@@ -248,7 +247,7 @@ class U_I18N_API SimpleNumberFormatter : public UMemory {
      * Run the formatter with the internal types.
      * @internal
      */
-    void formatImpl(impl::UFormattedNumberData* data, USimpleNumberSign sign, UErrorCode& status) const;
+    void formatImpl(impl::UFormattedNumberData& data, USimpleNumberSign sign, UErrorCode& status) const;
 #endif // U_HIDE_INTERNAL_API
 
     /**

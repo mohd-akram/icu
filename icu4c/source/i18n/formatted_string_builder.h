@@ -50,6 +50,7 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
 
     ~FormattedStringBuilder();
 
+    FormattedStringBuilder(FormattedStringBuilder &&other);
     FormattedStringBuilder(const FormattedStringBuilder &other);
 
     // Convention: bottom 4 bits for field, top 4 bits for field category.
@@ -70,6 +71,7 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
         inline bool operator!=(const Field& other) const;
     };
 
+    FormattedStringBuilder &operator=(FormattedStringBuilder &&other);
     FormattedStringBuilder &operator=(const FormattedStringBuilder &other);
 
     int32_t length() const;
