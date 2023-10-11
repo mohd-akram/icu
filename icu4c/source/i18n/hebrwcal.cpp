@@ -572,8 +572,8 @@ void HebrewCalendar::validateField(UCalendarDateFields field, UErrorCode &status
 */
 void HebrewCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
     int32_t d = julianDay - 347997;
-    double m = ClockMath::floorDivide((d * (double)DAY_PARTS), (double) MONTH_PARTS);  // Months (approx)
-    int32_t year = (int32_t)(ClockMath::floorDivide((19. * m + 234.), 235.) + 1.);     // Years (approx)
+    auto m = ClockMath::floorDivide((d * DAY_PARTS), MONTH_PARTS);  // Months (approx)
+    int32_t year = ClockMath::floorDivide((19 * m + 234), 235) + 1;     // Years (approx)
     int32_t ys  = startOfYear(year, status);                   // 1st day of year
     int32_t dayOfYear = (d - ys);
 

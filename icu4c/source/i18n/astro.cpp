@@ -212,7 +212,7 @@ const double CalendarAstronomer::PI = 3.14159265358979323846;
  * The modulus operator.
  */
 inline static double normalize(double value, double range)  {
-    return value - range * ClockMath::floorDivide(value, range);
+    return value - range * ClockMath::floorDivide((int64_t)value, range);
 }
 
 /**
@@ -422,7 +422,7 @@ double CalendarAstronomer::lstToUT(double lst) {
     double lt = normalize((lst - getSiderealOffset()) * 0.9972695663, 24);
 
     // Then find local midnight on this day
-    double base = (DAY_MS * ClockMath::floorDivide(fTime + fGmtOffset,(double)DAY_MS)) - fGmtOffset;
+    auto base = (DAY_MS * ClockMath::floorDivide((int64_t)(fTime + fGmtOffset), (int64_t)DAY_MS)) - fGmtOffset;
 
     //out("    lt  =" + lt + " hours");
     //out("    base=" + new Date(base));
@@ -753,7 +753,7 @@ UDate CalendarAstronomer::getSunRiseSet(UBool rise)
     UDate t0 = fTime;
 
     // Make a rough guess: 6am or 6pm local time on the current day
-    double noon = ClockMath::floorDivide(fTime + fGmtOffset, (double)DAY_MS)*DAY_MS - fGmtOffset + (12*HOUR_MS);
+    auto noon = ClockMath::floorDivide(fTime + fGmtOffset, DAY_MS)*DAY_MS - fGmtOffset + (12*HOUR_MS);
 
     U_DEBUG_ASTRO_MSG(("Noon=%.2lf, %sL, gmtoff %.2lf\n", noon, debug_astro_date(noon+fGmtOffset), fGmtOffset));
     setTime(noon +  ((rise ? -6 : 6) * HOUR_MS));

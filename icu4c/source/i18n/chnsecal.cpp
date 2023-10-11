@@ -330,7 +330,7 @@ int32_t ChineseCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, U
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        double m = month;
+        auto m = month;
         eyear += (int32_t)ClockMath::floorDivide(m, 12.0, &m);
         month = (int32_t)m;
     }
@@ -510,10 +510,10 @@ double ChineseCalendar::millisToDays(double millis) const {
         UErrorCode status = U_ZERO_ERROR;
         fZoneAstroCalc->getOffset(millis, false, rawOffset, dstOffset, status);
         if (U_SUCCESS(status)) {
-        	return ClockMath::floorDivide(millis + (double)(rawOffset + dstOffset), kOneDay);
+            return ClockMath::floorDivide((int64_t)millis + (rawOffset + dstOffset), kOneDay);
         }
     }
-    return ClockMath::floorDivide(millis + (double)CHINA_OFFSET, kOneDay);
+    return ClockMath::floorDivide((int64_t)millis + CHINA_OFFSET, kOneDay);
 }
 
 //------------------------------------------------------------------

@@ -51,16 +51,6 @@ class ClockMath {
      */
     static int64_t floorDivide(int64_t numerator, int64_t denominator);
 
-    /**
-     * Divide two numbers, returning the floor of the quotient.
-     * Unlike the built-in division, this is mathematically
-     * well-behaved.  E.g., <code>-1/4</code> => 0 but
-     * <code>floorDivide(-1,4)</code> => -1.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be != 0
-     * @return the floor of the quotient
-     */
-    static inline double floorDivide(double numerator, double denominator);
 
     /**
      * Divide two numbers, returning the floor of the quotient and
@@ -77,39 +67,8 @@ class ClockMath {
      * |denominator|)</code>.
      * @return the floor of the quotient
      */
-    static int32_t floorDivide(int32_t numerator, int32_t denominator,
+    static int32_t floorDivide(int64_t numerator, int32_t denominator,
                                int32_t* remainder);
-
-    /**
-     * Divide two numbers, returning the floor of the quotient and
-     * the modulus remainder.  Unlike the built-in division, this is
-     * mathematically well-behaved.  E.g., <code>-1/4</code> => 0 and
-     * <code>-1%4</code> => -1, but <code>floorDivide(-1,4)</code> =>
-     * -1 with <code>remainder</code> => 3.  NOTE: If numerator is
-     * too large, the returned quotient may overflow.
-     * @param numerator the numerator
-     * @param denominator a divisor which must be != 0
-     * @param remainder output parameter to receive the
-     * remainder. Unlike <code>numerator % denominator</code>, this
-     * will always be non-negative, in the half-open range <code>[0,
-     * |denominator|)</code>.
-     * @return the floor of the quotient
-     */
-    static int32_t floorDivide(double numerator, int32_t denominator,
-                               int32_t* remainder);
-
-    /**
-     * For a positive divisor, return the quotient and remainder
-     * such that dividend = quotient*divisor + remainder and
-     * 0 <= remainder < divisor.
-     *
-     * Works around edge-case bugs.  Handles pathological input
-     * (dividend >> divisor) reasonably.
-     *
-     * Calling with a divisor <= 0 is disallowed.
-     */
-    static double floorDivide(double dividend, double divisor,
-                              double* remainder);
 };
 
 // Useful millisecond constants
@@ -282,10 +241,6 @@ class Grego {
     static const int8_t MONTH_LENGTH[24];
 };
 
-inline double ClockMath::floorDivide(double numerator, double denominator) {
-    return uprv_floor(numerator / denominator);
-}
-
 inline UBool Grego::isLeapYear(int32_t year) {
     // year&0x3 == year%4
     return ((year&0x3) == 0) && ((year%100 != 0) || (year%400 == 0));
@@ -313,7 +268,7 @@ inline double Grego::julianDayToMillis(int32_t julian)
 }
 
 inline int32_t Grego::millisToJulianDay(double millis) {
-  return (int32_t) (kEpochStartAsJulianDay + ClockMath::floorDivide(millis, (double)kOneDay));
+  return (int32_t) (kEpochStartAsJulianDay + ClockMath::floorDivide((int64_t)millis, kOneDay));
 }
 
 inline int32_t Grego::gregorianShift(int32_t eyear) {

@@ -32,63 +32,11 @@ int64_t ClockMath::floorDivide(int64_t numerator, int64_t denominator) {
         numerator / denominator : ((numerator + 1) / denominator) - 1;
 }
 
-int32_t ClockMath::floorDivide(int32_t numerator, int32_t denominator,
+int32_t ClockMath::floorDivide(int64_t numerator, int32_t denominator,
                           int32_t* remainder) {
-    auto quotient = floorDivide(numerator, denominator);
+    auto quotient = floorDivide(numerator, (int64_t) denominator);
     if (remainder != nullptr) {
       *remainder = numerator - (quotient * denominator);
-    }
-    return quotient;
-}
-
-int32_t ClockMath::floorDivide(double numerator, int32_t denominator,
-                          int32_t* remainder) {
-    // For an integer n and representable ⌊x/n⌋, ⌊RN(x/n)⌋=⌊x/n⌋, where RN is
-    // rounding to nearest.
-    double quotient = uprv_floor(numerator / denominator);
-    if (remainder != nullptr) {
-      // For doubles x and n, where n is an integer and ⌊x+n⌋ < 2³¹, the
-      // expression `(int32_t) (x + n)` evaluated with rounding to nearest
-      // differs from ⌊x+n⌋ if 0 < ⌈x⌉−x ≪ x+n, as `x + n` is rounded up to
-      // n+⌈x⌉ = ⌊x+n⌋ + 1.  Rewriting it as ⌊x⌋+n makes the addition exact.
-      *remainder = (int32_t) (uprv_floor(numerator) - (quotient * denominator));
-    }
-    return (int32_t) quotient;
-}
-
-double ClockMath::floorDivide(double dividend, double divisor,
-                         double* remainder) {
-    // Only designed to work for positive divisors
-    U_ASSERT(divisor > 0);
-    double quotient = floorDivide(dividend, divisor);
-    double r = dividend - (quotient * divisor);
-    // N.B. For certain large dividends, on certain platforms, there
-    // is a bug such that the quotient is off by one.  If you doubt
-    // this to be true, set a breakpoint below and run cintltst.
-    if (r < 0 || r >= divisor) {
-        // E.g. 6.7317038241449352e+022 / 86400000.0 is wrong on my
-        // machine (too high by one).  4.1792057231752762e+024 /
-        // 86400000.0 is wrong the other way (too low).
-        double q = quotient;
-        quotient += (r < 0) ? -1 : +1;
-        if (q == quotient) {
-            // For quotients > ~2^53, we won't be able to add or
-            // subtract one, since the LSB of the mantissa will be >
-            // 2^0; that is, the exponent (base 2) will be larger than
-            // the length, in bits, of the mantissa.  In that case, we
-            // can't give a correct answer, so we set the remainder to
-            // zero.  This has the desired effect of making extreme
-            // values give back an approximate answer rather than
-            // crashing.  For example, UDate values above a ~10^25
-            // might all have a time of midnight.
-            r = 0;
-        } else {
-            r = dividend - (quotient * divisor);
-        }
-    }
-    U_ASSERT(0 <= r && r < divisor);
-    if (remainder != nullptr) {
-        *remainder = r;
     }
     return quotient;
 }
@@ -155,8 +103,8 @@ void Grego::dayToFields(int32_t day, int32_t& year, int32_t& month,
 
 void Grego::timeToFields(UDate time, int32_t& year, int32_t& month,
                         int32_t& dom, int32_t& dow, int32_t& doy, int32_t& mid) {
-    double millisInDay;
-    double day = ClockMath::floorDivide((double)time, (double)U_MILLIS_PER_DAY, &millisInDay);
+    int32_t millisInDay;
+    auto day = ClockMath::floorDivide(time, U_MILLIS_PER_DAY, &millisInDay);
     mid = (int32_t)millisInDay;
     dayToFields(day, year, month, dom, dow, doy);
 }

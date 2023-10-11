@@ -331,7 +331,7 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
     // normalized cutover is in pure date milliseconds; it contains no time
     // of day or timezone component, and it used to compare against other
     // pure date values.
-    double cutoverDay = ClockMath::floorDivide(date, (double)kOneDay);
+    auto cutoverDay = ClockMath::floorDivide((int64_t)date, kOneDay);
 
     // Handle the rare case of numeric overflow where the user specifies a time
     // outside of INT32_MIN .. INT32_MAX number of days.
@@ -673,9 +673,9 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
     complete(status);
     // Divide by 1000 (convert to seconds) in order to prevent overflow when
     // dealing with UDate(Long.MIN_VALUE) and UDate(Long.MAX_VALUE).
-    double wallSec = internalGetTime()/1000 + (internalGet(UCAL_ZONE_OFFSET) + internalGet(UCAL_DST_OFFSET))/1000;
+    auto wallSec = internalGetTime()/1000 + (internalGet(UCAL_ZONE_OFFSET) + internalGet(UCAL_DST_OFFSET))/1000;
 
-    return ClockMath::floorDivide(wallSec, kOneDay/1000.0);
+    return ClockMath::floorDivide((int64_t)wallSec, kOneDay/1000.0);
 }
 
 // -------------------------------------
@@ -763,7 +763,7 @@ double GregorianCalendar::computeJulianDayOfYear(UBool isGregorian,
 double 
 GregorianCalendar::millisToJulianDay(UDate millis)
 {
-    return (double)kEpochStartAsJulianDay + ClockMath::floorDivide(millis, (double)kOneDay);
+    return kEpochStartAsJulianDay + ClockMath::floorDivide((int64_t)millis, kOneDay);
 }
 
 // -------------------------------------
